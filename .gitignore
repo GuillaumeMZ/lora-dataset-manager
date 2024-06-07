@@ -1,0 +1,10 @@
+# XMake artifacts
+.xmake/
+build/
+
+# CMake artifacts + CMakeLists
+cmake-build-debug/
+CMakeLists.txt
+
+# CLion files
+.idea/
