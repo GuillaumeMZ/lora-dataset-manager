@@ -74,14 +74,12 @@ Window {
             width: implicitWidth
 
             text: "Grabber"
-            Rectangle { color: "red" }
         }
 
         TabButton {
             width: implicitWidth
 
             text: "Download manager"
-            Rectangle { color: "blue" }
         }
     }
 
