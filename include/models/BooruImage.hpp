@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QUrl>
 
+//TODO: rename attributes imageThumbnailUrl and fullImageUrl so that they match the XML
 class BooruImage: public QObject
 {
     Q_OBJECT
@@ -12,6 +13,11 @@ class BooruImage: public QObject
             QObject(parent),
             imageThumbnailUrl(imageThumbnailUrl),
             fullImageUrl(fullImageUrl)
+        {
+        }
+
+        BooruImage(const BooruImage& rhs, QObject* parent = nullptr):
+                BooruImage(rhs.imageThumbnailUrl, rhs.fullImageUrl, parent)
         {
         }
 

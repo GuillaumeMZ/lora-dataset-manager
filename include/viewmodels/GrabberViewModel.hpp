@@ -21,6 +21,7 @@ class GrabberViewModel: public QObject
         Q_PROPERTY(EasyListModel<BooruImage*>* queriedImages MEMBER queriedImages NOTIFY queriedImagesChanged)
 
     signals:
+        void errorOccured(QString errorDescription);
         void queriedImagesChanged();
 
     private:
