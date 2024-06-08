@@ -54,6 +54,8 @@ Window {
         height: 32
 
         text: "Search"
+
+        onClicked: grabber.runSearch(booruSelector.currentText, queryInput.text)
     }
 
     TabBar {
@@ -108,6 +110,17 @@ Window {
                 Flow {
                     spacing: 8
                     width: mainTabContent.width
+
+                    Repeater {
+                        model: grabber.queriedImages
+
+                        Image {
+                            width: 250; height: 250
+
+                            fillMode: Image.PreserveAspectFit
+                            source: item.imageThumbnailUrl
+                        }
+                    }
                 }
             }
         }

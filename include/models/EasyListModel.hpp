@@ -7,6 +7,11 @@ template<typename T>
 class EasyListModel: public QAbstractListModel
 {
     public:
+        explicit EasyListModel(QObject* parent = nullptr):
+            QAbstractListModel(parent)
+        {
+        }
+
         void append(const T& value);
         void clear();
 
