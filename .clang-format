@@ -42,7 +42,7 @@ NamespaceIndentation: All
 PenaltyBreakBeforeFirstCallParameter: 0
 PointerAlignment: Left
 ReflowComments: false
-SortIncludes: true
+SortIncludes: Never
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
