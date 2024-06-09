@@ -2,10 +2,16 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import LDM 1.0
+
 Window {
     width: 800; height: 600
     title: "Downloader"
     visible: true
+
+    GrabberViewModel {
+        id: grabber
+    }
 
     TextField {
         id: queryInput
@@ -114,12 +120,36 @@ Window {
                     Repeater {
                         model: grabber.queriedImages
 
-                        Image {
-                            width: Math.max(implicitWidth, implicitHeight)
-                            height: Math.max(implicitWidth, implicitHeight)
+                        Item {
+                            width: thumbnail.width
+                            height: thumbnail.height
 
-                            fillMode: Image.PreserveAspectFit
-                            source: item.imageThumbnailUrl
+                            Image {
+                                id: thumbnail
+
+                                width: Math.max(implicitWidth, implicitHeight)
+                                height: Math.max(implicitWidth, implicitHeight)
+
+                                fillMode: Image.PreserveAspectFit
+                                source: item.imageThumbnailUrl
+                            }
+
+                            CheckBox {
+                                anchors {
+                                    left: parent.left
+                                    top: parent.top
+                                    leftMargin: 8
+                                    topMargin: 8
+                                }
+
+                                onClicked: downloadSettingsDialog.show()
+                            }
+
+                            ImageDownloadSettingsDialog {
+                                id: downloadSettingsDialog
+
+                                image: item
+                            }
                         }
                     }
                 }
