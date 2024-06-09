@@ -25,5 +25,5 @@ void GrabberViewModel::runSearch(const QString& booruProvider, const QString& qu
         emit this->errorOccured(std::move(errorDescription));
     });
 
-    searchRequest->start(BooruSearchParameters {booruProvider, query});
+    searchRequest->start(BooruSearchParameters { booruProvider, query });
 }
