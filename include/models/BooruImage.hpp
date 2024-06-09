@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include <QObject>
 #include <QUrl>
 
@@ -9,10 +11,10 @@ class BooruImage: public QObject
     Q_OBJECT
 
     public:
-        BooruImage(const QUrl& imageThumbnailUrl, const QUrl& fullImageUrl, QObject* parent = nullptr):
+        BooruImage(QUrl imageThumbnailUrl, QUrl fullImageUrl, QObject* parent = nullptr):
             QObject(parent),
-            imageThumbnailUrl(imageThumbnailUrl),
-            fullImageUrl(fullImageUrl)
+            imageThumbnailUrl(std::move(imageThumbnailUrl)),
+            fullImageUrl(std::move(fullImageUrl))
         {
         }
 
@@ -21,10 +23,9 @@ class BooruImage: public QObject
         {
         }
 
-        Q_PROPERTY(QUrl imageThumbnailUrl MEMBER imageThumbnailUrl CONSTANT)
-        Q_PROPERTY(QUrl fullImageUrl MEMBER fullImageUrl CONSTANT)
+        Q_PROPERTY(const QUrl imageThumbnailUrl MEMBER imageThumbnailUrl CONSTANT)
+        Q_PROPERTY(const QUrl fullImageUrl MEMBER fullImageUrl CONSTANT)
 
-    private:
-        QUrl imageThumbnailUrl;
-        QUrl fullImageUrl;
+        const QUrl imageThumbnailUrl;
+        const QUrl fullImageUrl;
 };

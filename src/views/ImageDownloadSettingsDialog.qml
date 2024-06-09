@@ -58,7 +58,7 @@ Window {
         text: "Image tagging:"
     }
 
-    ComboBox {
+    CheckBox {
         id: taggingStrategy
 
         anchors {
@@ -72,7 +72,8 @@ Window {
 
         height: 32
 
-        model: ["Download", "Don't download"]
+        checkState: Qt.Checked
+        text: "Download associated tags"
     }
 
     Button {
@@ -86,6 +87,10 @@ Window {
         height: 32
 
         text: "Download"
+        onClicked: () => {
+            grabber.addImageToDownloadList(image, nameField.text, taggingStrategy.checkedState === true);
+            window.close();
+        }
     }
 
     Button {

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <utility>
 
 #include <QDebug>
@@ -26,4 +27,30 @@ void GrabberViewModel::runSearch(const QString& booruProvider, const QString& qu
     });
 
     searchRequest->start(BooruSearchParameters { booruProvider, query });
+}
+
+bool GrabberViewModel::isImageMarkedForDownload(const QUrl& imageUrl) const
+{
+	return std::find_if(scheduledImages->cbegin(), scheduledImages->cend(), [imageUrl](auto item) {
+		return item->target->fullImageUrl == imageUrl;
+	}) != scheduledImages->cend();
+}
+
+void GrabberViewModel::addImageToDownloadList(const BooruImage* target, const QString& downloadName, bool downloadTags)
+{
+	if(isImageMarkedForDownload(target->fullImageUrl))
+	{
+		return;
+	}
+
+	scheduledImages->append(new ScheduledDownloadBooruImage(target, downloadName, downloadTags, this));
+
+	emit scheduledImagesChanged();
+}
+
+void GrabberViewModel::removeImageFromDownloadList(const QUrl& imageUrl)
+{
+	scheduledImages->removeIf([imageUrl](auto item) {
+		return item->target->fullImageUrl == imageUrl;
+	});
 }
