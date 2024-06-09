@@ -6,7 +6,7 @@ target("ldm")
     add_files("src/**.cpp")
     add_files(
         "include/models/BooruImage.hpp",
-        "include/services/BooruSearchService.hpp",
+        "include/services/booru/BooruSearchService.hpp",
         "include/viewmodels/GrabberViewModel.hpp"
     )
     add_files("qml.qrc")

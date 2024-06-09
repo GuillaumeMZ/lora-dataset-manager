@@ -31,7 +31,3 @@ class BooruSearchRequest: public QObject
         void finished(QList<BooruImage*> queriedImages);
         void errorOccured(QString errorDescription);
 };
-
-//TODO: find better name
-static QNetworkReply* DoSearch(const QString& provider, const QString& query);
-static std::variant<QList<BooruImage*>, QString> ParseBooruXmlResponse(const QDomDocument& document);

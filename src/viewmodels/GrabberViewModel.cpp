@@ -3,7 +3,7 @@
 #include <QDebug>
 
 #include "viewmodels/GrabberViewModel.hpp"
-#include "services/BooruSearchService.hpp"
+#include "services/booru/BooruSearchService.hpp"
 
 void GrabberViewModel::runSearch(const QString& booruProvider, const QString& query)
 {
