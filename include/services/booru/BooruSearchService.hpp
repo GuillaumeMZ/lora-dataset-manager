@@ -20,12 +20,9 @@ class BooruSearchRequest: public QObject
     Q_OBJECT
 
     public:
-        BooruSearchRequest(QObject* parent = nullptr):
-            QObject(parent)
-        {
-        }
+		using QObject::QObject;
 
-        void start(const BooruSearchParameters& searchParameters);
+		void start(const BooruSearchParameters& searchParameters);
 
     signals:
         void finished(QList<BooruImage*> queriedImages);

@@ -1,26 +1,30 @@
 #include <QDomDocument>
-#include <QDomElement>
 #include <QUrl>
 #include <QUrlQuery>
 
 #include "services/booru/GelbooruProvider.hpp"
 
+QNetworkRequest PrepareGelbooruRequest(const QString& booruBaseUrl, const BooruSearchParameters& parameters)
+{
+	QUrlQuery urlParameters {
+	    { "page", "dapi" },
+	    { "s", "post" },
+	    { "q", "index" },
+	    //TODO: change
+	    { "limit", "100" },
+	    { "pid", "0" },
+	    { "tags", parameters.query }
+	};
+
+	QUrl queryUrl(QString("https://%1/index.php").arg(booruBaseUrl));
+	queryUrl.setQuery(urlParameters);
+
+	return QNetworkRequest(queryUrl);
+}
+
 QNetworkRequest GelbooruProvider::prepareRequest(const BooruSearchParameters& parameters)
 {
-    QUrlQuery urlParameters {
-            { "page", "dapi" },
-            { "s", "post" },
-            { "q", "index" },
-            //TODO: change
-            { "limit", "100" },
-            { "pid", "0" },
-            { "tags", parameters.query }
-    };
-
-    QUrl queryUrl("https://gelbooru.com/index.php");
-    queryUrl.setQuery(urlParameters);
-
-    return QNetworkRequest(queryUrl);
+	return PrepareGelbooruRequest("gelbooru.com", parameters);
 }
 
 std::variant<QList<BooruImage*>, QString> GelbooruProvider::tryParseReply(QNetworkReply& reply) const
