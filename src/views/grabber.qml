@@ -115,7 +115,8 @@ Window {
                         model: grabber.queriedImages
 
                         Image {
-                            width: 250; height: 250
+                            width: Math.max(implicitWidth, implicitHeight)
+                            height: Math.max(implicitWidth, implicitHeight)
 
                             fillMode: Image.PreserveAspectFit
                             source: item.imageThumbnailUrl
