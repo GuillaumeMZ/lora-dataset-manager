@@ -10,7 +10,7 @@ Window {
     visible: true
 
     GrabberViewModel {
-        id: grabber
+        id: grabberViewModel
     }
 
     TextField {
@@ -61,7 +61,7 @@ Window {
 
         text: "Search"
 
-        onClicked: grabber.runSearch(booruSelector.currentText, queryInput.text)
+        onClicked: grabberViewModel.runSearch(booruSelector.currentText, queryInput.text)
     }
 
     TabBar {
@@ -104,8 +104,6 @@ Window {
             bottomMargin: 8
         }
 
-        height: 300
-
         currentIndex: mainTabBar.currentIndex
 
         Item {
@@ -118,7 +116,7 @@ Window {
                     width: mainTabContent.width
 
                     Repeater {
-                        model: grabber.queriedImages
+                        model: grabberViewModel.queriedImages
 
                         Item {
                             width: thumbnail.width
@@ -148,6 +146,7 @@ Window {
                             ImageDownloadSettingsDialog {
                                 id: downloadSettingsDialog
 
+                                grabber: grabberViewModel
                                 image: item
                             }
                         }

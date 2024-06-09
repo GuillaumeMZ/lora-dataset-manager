@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file alias="ImageDownloadSettingsDialog.qml">src/views/ImageDownloadSettingsDialog.qml</file>
         <file alias="grabber.qml">src/views/grabber.qml</file>
         <file alias="main.qml">src/views/main.qml</file>
     </qresource>
