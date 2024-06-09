@@ -31,6 +31,8 @@ void GrabberViewModel::runSearch(const QString& booruProvider, const QString& qu
 
 bool GrabberViewModel::isImageMarkedForDownload(const QUrl& imageUrl) const
 {
+    qDebug() << "isImageMarkedForDownload";
+
 	return std::find_if(scheduledImages->cbegin(), scheduledImages->cend(), [imageUrl](auto item) {
 		return item->target->fullImageUrl == imageUrl;
 	}) != scheduledImages->cend();
@@ -38,6 +40,8 @@ bool GrabberViewModel::isImageMarkedForDownload(const QUrl& imageUrl) const
 
 void GrabberViewModel::addImageToDownloadList(const BooruImage* target, const QString& downloadName, bool downloadTags)
 {
+    qDebug() << "addImageToDownloadList";
+
 	if(isImageMarkedForDownload(target->fullImageUrl))
 	{
 		return;
@@ -50,6 +54,8 @@ void GrabberViewModel::addImageToDownloadList(const BooruImage* target, const QS
 
 void GrabberViewModel::removeImageFromDownloadList(const QUrl& imageUrl)
 {
+    qDebug() << "removeImageFromDownloadList";
+
 	scheduledImages->removeIf([imageUrl](auto item) {
 		return item->target->fullImageUrl == imageUrl;
 	});

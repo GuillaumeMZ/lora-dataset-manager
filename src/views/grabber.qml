@@ -133,14 +133,32 @@ Window {
                             }
 
                             CheckBox {
+                                id: isInDownloadList
+
                                 anchors {
                                     left: parent.left
-                                    top: parent.top
                                     leftMargin: 8
+                                    top: parent.top
                                     topMargin: 8
                                 }
 
-                                onClicked: downloadSettingsDialog.show()
+                                Connections {
+                                    target: downloadSettingsDialog
+
+                                    function onImageAddedToDownloadList() {
+                                        isInDownloadList.checkState = Qt.Checked;
+                                    }
+                                }
+
+                                nextCheckState: function () {
+                                    if (checkState === Qt.Unchecked) {
+                                        downloadSettingsDialog.show();
+                                    } else {
+                                        grabberViewModel.removeImageFromDownloadList(item.fullImageUrl);
+                                    }
+
+                                    return Qt.Unchecked;
+                                }
                             }
 
                             ImageDownloadSettingsDialog {

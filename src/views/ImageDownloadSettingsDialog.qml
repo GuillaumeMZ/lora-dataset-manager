@@ -9,6 +9,8 @@ Window {
     required property var image
     required property GrabberViewModel grabber
 
+    signal imageAddedToDownloadList()
+
     minimumWidth: maximumWidth
     minimumHeight: maximumHeight
     maximumWidth: 400
@@ -89,6 +91,7 @@ Window {
         text: "Download"
         onClicked: () => {
             grabber.addImageToDownloadList(image, nameField.text, taggingStrategy.checkedState === true);
+            imageAddedToDownloadList();
             window.close();
         }
     }
