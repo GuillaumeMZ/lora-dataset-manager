@@ -150,6 +150,8 @@ Window {
                                     }
                                 }
 
+                                checkState: grabberViewModel.isImageMarkedForDownload(item.fullImageUrl) ? Qt.Checked : Qt.Unchecked
+
                                 nextCheckState: function () {
                                     if (checkState === Qt.Unchecked) {
                                         downloadSettingsDialog.show();
