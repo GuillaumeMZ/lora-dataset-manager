@@ -142,14 +142,6 @@ Window {
                                     topMargin: 8
                                 }
 
-                                Connections {
-                                    target: downloadSettingsDialog
-
-                                    function onImageAddedToDownloadList() {
-                                        isInDownloadList.checkState = Qt.Checked;
-                                    }
-                                }
-
                                 checkState: grabberViewModel.isImageMarkedForDownload(item.fullImageUrl) ? Qt.Checked : Qt.Unchecked
 
                                 nextCheckState: function () {
@@ -168,6 +160,8 @@ Window {
 
                                 grabber: grabberViewModel
                                 image: item
+
+                                onImageAddedToDownloadList: isInDownloadList.checkState = Qt.Checked;
                             }
                         }
                     }
