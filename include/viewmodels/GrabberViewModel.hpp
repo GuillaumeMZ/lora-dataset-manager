@@ -27,6 +27,8 @@ class GrabberViewModel: public QObject
 	    Q_PROPERTY(EasyListModel<ScheduledDownloadBooruImage*>* scheduledImages MEMBER scheduledImages NOTIFY scheduledImagesChanged)
 
     signals:
+        void queryStarted();
+        void queryFinished();
         void errorOccured(QString errorDescription);
         void queriedImagesChanged();
 	    void scheduledImagesChanged();

@@ -107,9 +107,13 @@ Window {
         currentIndex: mainTabBar.currentIndex
 
         Item {
+            id: grabberView
+
             ScrollView {
                 anchors.fill: parent
                 anchors.topMargin: 8
+
+                visible: parent.state !== "no_result"
 
                 Flow {
                     spacing: 8
@@ -167,6 +171,37 @@ Window {
                     }
                 }
             }
+
+            Text {
+                anchors.centerIn: parent
+
+                text: "No result."
+                visible: parent.state === "no_result"
+            }
+
+            Connections {
+                target: grabberViewModel
+
+                function onQueryStarted() {
+                    grabberView.state = "";
+                }
+
+                function onQueryFinished() {
+                    if(grabberViewModel.queriedImages.rowCount() === 0) {
+                        grabberView.state = "no_result";
+                    }
+                }
+
+                function onErrorOccured(errorMessage) {
+                    //TODO
+                }
+            }
+
+            states: [
+                State {
+                    name: "no_result"
+                }
+            ]
         }
     }
 
