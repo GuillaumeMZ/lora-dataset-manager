@@ -8,6 +8,7 @@ target("ldm")
         "include/models/BooruImage.hpp",
         "include/models/DatasetItem.hpp",
         "include/models/ScheduledDownloadBooruImage.hpp",
+        "include/services/LocalDatasetWatcher.hpp",
         "include/services/booru/BooruSearchService.hpp",
         "include/viewmodels/GrabberViewModel.hpp"
     )
