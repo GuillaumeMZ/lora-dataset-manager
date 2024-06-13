@@ -1,10 +1,9 @@
-# XMake artifacts
-.xmake/
-build/
-
-# CMake artifacts + CMakeLists
+# CMake artifacts
 cmake-build-debug/
-CMakeLists.txt
 
 # CLion files
 .idea/
+
+# QtCreator files
+build/
+CMakeLists.txt.user
