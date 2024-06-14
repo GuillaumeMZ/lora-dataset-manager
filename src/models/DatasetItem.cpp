@@ -1,26 +1,21 @@
 #include "models/DatasetItem.hpp"
 
-DatasetItem DatasetItem::FromUnknown(const QFileInfo &fileInfo, QObject *parent)
+DatasetItem::DatasetItem(const QFileInfo &fileInfo, QObject *parent):
+    DatasetItem(fileInfo, fileInfo.isDir() ? Type::Directory : Type::Unknown, QVariant(), parent)
 {
-    return DatasetItem(fileInfo, Type::Unknown, QVariant(), parent);
 }
 
-DatasetItem DatasetItem::FromDirectory(const QFileInfo &fileInfo, QObject *parent)
-{
-    return DatasetItem(fileInfo, Type::Directory, QVariant(), parent);
-}
-
-DatasetItem DatasetItem::FromImage(
+DatasetItem::DatasetItem(
         const QFileInfo& fileInfo,
-        const QList<DatasetItem *>& associatedTagfiles,
-        const QList<DatasetItem *>& concurrents,
+        const QList<DatasetItem*>& associatedTagfiles,
+        const QList<DatasetItem*>& concurrents,
         QObject* parent
-)
+):
+    DatasetItem(fileInfo, Type::Image, QVariant::fromValue(new ImageInfo(associatedTagfiles, concurrents, this)), parent)
 {
-    return DatasetItem(fileInfo, Type::Image, QVariant::fromValue(ImageInfo(associatedTagfiles, concurrents)), parent);
 }
 
-DatasetItem DatasetItem::FromTagfile(const QFileInfo& fileInfo, const QString& tags, QObject* parent)
+DatasetItem::DatasetItem(const QFileInfo& fileInfo, const QString& tags, QObject* parent):
+    DatasetItem(fileInfo, Type::Tagfile, QVariant::fromValue(new TagfileInfo(tags, this)), parent)
 {
-    return DatasetItem(fileInfo, Type::Tagfile, QVariant::fromValue(TagfileInfo(tags)));
 }

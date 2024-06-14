@@ -7,18 +7,26 @@
 
 class DatasetItem: public QObject
 {
-    Q_OBJECT //Q_GADGET ??
+    Q_OBJECT
 
     public:
-        static DatasetItem FromUnknown(const QFileInfo& fileInfo, QObject* parent = nullptr);
-        static DatasetItem FromDirectory(const QFileInfo& fileInfo, QObject* parent = nullptr);
-        static DatasetItem FromImage(
+        /**
+        * Creates a DatasetItem of type Directory or Unknown, depending on whether fileInfo is one.
+        */
+        DatasetItem(const QFileInfo& fileInfo, QObject* parent = nullptr);
+        /**
+         * Creates a DatasetItem of type Image
+         */
+        DatasetItem(
                 const QFileInfo& fileInfo,
                 const QList<DatasetItem*>& associatedTagfiles,
                 const QList<DatasetItem*>& concurrents,
                 QObject* parent = nullptr
         );
-        static DatasetItem FromTagfile(const QFileInfo& fileInfo, const QString& tags, QObject* parent = nullptr);
+        /**
+         * Creates a DatasetItem of type Tagfile
+         */
+        DatasetItem(const QFileInfo& fileInfo, const QString& tags, QObject* parent = nullptr);
 
         enum Type
         {
@@ -47,46 +55,46 @@ class DatasetItem: public QObject
         const QVariant specificInfos;
 };
 
-class ImageInfo
+class ImageInfo: public QObject
 {
-    Q_GADGET
+    Q_OBJECT
 
     public:
-        ImageInfo() = default; //shouldn't be used, only here to make q_declare_metatype happy
-        ImageInfo(const ImageInfo&) = default;
-        ImageInfo(const QList<DatasetItem*>& associatedTagfiles, const QList<DatasetItem*>& concurrents):
+        ImageInfo(const QList<DatasetItem*>& associatedTagfiles, const QList<DatasetItem*>& concurrents, QObject* parent = nullptr):
+            QObject(parent),
             associatedTagfiles(associatedTagfiles),
             concurrents(concurrents)
         {
         }
-        ~ImageInfo() = default;
 
-        Q_PROPERTY(const QList<DatasetItem*> associatedTagfiles MEMBER associatedTagfiles CONSTANT)
-        Q_PROPERTY(const QList<DatasetItem*> concurrents MEMBER concurrents CONSTANT)
+        Q_PROPERTY(QList<DatasetItem*> associatedTagfiles MEMBER associatedTagfiles NOTIFY associatedTagfilesChanged)
+        Q_PROPERTY(QList<DatasetItem*> concurrents MEMBER concurrents NOTIFY concurrentsChanged)
+
+    signals:
+        void associatedTagfilesChanged();
+        void concurrentsChanged();
 
     private:
-        const QList<DatasetItem*> associatedTagfiles;
-        const QList<DatasetItem*> concurrents;
+        QList<DatasetItem*> associatedTagfiles;
+        QList<DatasetItem*> concurrents;
 };
-Q_DECLARE_METATYPE(ImageInfo)
 
-class TagfileInfo
+class TagfileInfo: public QObject
 {
-    Q_GADGET
+    Q_OBJECT
 
     public:
-        TagfileInfo() = default; //shouldn't be used, only here to make q_declare_metatype happy
-        TagfileInfo(const TagfileInfo&) = default;
-        TagfileInfo(const QString& tags):
+        TagfileInfo(const QString& tags, QObject* parent = nullptr):
+            QObject(parent),
             tags(tags)
         {
         }
-        ~TagfileInfo() = default;
 
-        Q_PROPERTY(const QString tags MEMBER tags CONSTANT)
+        Q_PROPERTY(QString tags MEMBER tags NOTIFY tagsChanged)
+
+    signals:
+        void tagsChanged();
 
     private:
-        const QString tags;
+        QString tags;
 };
-Q_DECLARE_METATYPE(TagfileInfo)
-
