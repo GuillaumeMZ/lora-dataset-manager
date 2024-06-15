@@ -18,9 +18,9 @@ class LocalDatasetWatcher: public QObject
         LocalDatasetWatcher(QDir datasetRoot, QObject *parent = nullptr);
 
     signals:
-        void itemAdded();
-        void itemRemoved();
-        void itemModified();
+        void itemAdded(QFileInfo);
+        void itemRemoved(QFileInfo);
+        void itemModified(QFileInfo);
         void datasetRemoved();
 
     private slots:
@@ -28,9 +28,7 @@ class LocalDatasetWatcher: public QObject
         void handleFileChange(const QString& path);
 
     private:
-        //Returns the relative path
         std::optional<QFileInfo> getAddedItem() const;
-        //Returns the relative path
         std::optional<QFileInfo> getRemovedItem() const;
 
     private:

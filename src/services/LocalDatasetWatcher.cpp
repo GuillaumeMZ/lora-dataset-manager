@@ -8,20 +8,19 @@ LocalDatasetWatcher::LocalDatasetWatcher(QDir datasetRoot, QObject* parent):
     watcher({ datasetRoot.absolutePath() }),
     currentItems(datasetRoot.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot))
 {
-    qDebug() << "Initial config:" << currentItems;
-    for(const auto item: currentItems)
+    for(const auto& item: currentItems)
     {
         if(!item.isDir()) //we don't care about subdirectories' contents
         {
             watcher.addPath(item.absoluteFilePath());
         }
     }
-    qDebug() << "Initial watcher config:" << watcher.files() << "|" << watcher.directories();
 
     QObject::connect(&watcher, &QFileSystemWatcher::directoryChanged, this, &LocalDatasetWatcher::handleDirectoryChange);
     QObject::connect(&watcher, &QFileSystemWatcher::fileChanged, this, &LocalDatasetWatcher::handleFileChange);
 }
 
+//deleting the root directory itself will trigger a handleDirectoryChange
 //creating, renaming, deleting a file/directory will trigger a handleDirectoryChange with path being its parent
 //renaming / deleting / modifying a watched file will trigger a handleFileChange with path being itself
 //so:
@@ -30,6 +29,15 @@ LocalDatasetWatcher::LocalDatasetWatcher(QDir datasetRoot, QObject* parent):
 
 void LocalDatasetWatcher::handleDirectoryChange(const QString& path)
 {
+    Q_UNUSED(path)
+
+    if(!datasetRoot.exists())
+    {
+        currentItems.clear();
+        emit datasetRemoved();
+        return;
+    }
+
     //we check removing first, to correctly handle renaming-by-deletion logic
     if(auto removedItem = getRemovedItem(); removedItem.has_value())
     {
@@ -41,7 +49,8 @@ void LocalDatasetWatcher::handleDirectoryChange(const QString& path)
         currentItems.removeIf([removedItem](const QFileInfo& fileInfo) {
             return fileInfo.absoluteFilePath() == removedItem->absoluteFilePath();
         });
-        //TODO: emit signal
+
+        emit itemRemoved(*removedItem);
     }
 
     //check adding
@@ -53,9 +62,9 @@ void LocalDatasetWatcher::handleDirectoryChange(const QString& path)
         }
 
         currentItems.append(*addedItem);
-        //TODO: emit signal
+
+        emit itemAdded(*addedItem);
     }
-    qDebug() << "Dir change:" << path << "(dirs: " << watcher.directories() << ", paths:" << watcher.files() << ")";
 }
 
 void LocalDatasetWatcher::handleFileChange(const QString& path) {
