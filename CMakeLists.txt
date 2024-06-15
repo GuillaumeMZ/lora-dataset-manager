@@ -10,10 +10,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 qt_add_executable(app
         src/models/DatasetItem.cpp
+        src/models/LocalDataset.cpp
         src/services/booru/BooruSearchService.cpp
         src/services/booru/GelbooruProvider.cpp
         src/services/booru/SafebooruProvider.cpp
         src/services/LocalDatasetWatcher.cpp
+        src/viewmodels/DatasetViewerViewModel.cpp
         src/viewmodels/GrabberViewModel.cpp
         src/main.cpp
 
@@ -28,15 +30,20 @@ qt_add_executable(app
         include/services/booru/SafebooruProvider.hpp
         include/services/GlobalNetworkService.hpp
         include/services/LocalDatasetWatcher.hpp
+        include/viewmodels/DatasetViewerViewModel.hpp
         include/viewmodels/GrabberViewModel.hpp
 )
 qt_add_qml_module(app
-    URI ldm
+    URI LDM
     VERSION 1.0
     QML_FILES
+        src/views/DatasetViewer.qml
         src/views/grabber.qml
         src/views/ImageDownloadSettingsDialog.qml
         src/views/main.qml
+    SOURCES
+        include/viewmodels/GrabberViewModel.hpp
+        src/viewmodels/GrabberViewModel.cpp
 )
-target_include_directories(app PRIVATE include)
+target_include_directories(app PRIVATE include PRIVATE include/viewmodels)
 target_link_libraries(app PRIVATE Qt6::Gui Qt6::Quick Qt6::Xml)
