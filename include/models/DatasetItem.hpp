@@ -10,60 +10,37 @@ class DatasetItem: public QObject
     Q_OBJECT
 
     public:
-        /**
-        * Creates a DatasetItem of type Directory or Unknown, depending on whether fileInfo is one.
-        */
-        DatasetItem(const QFileInfo& fileInfo, QObject* parent = nullptr);
-        /**
-         * Creates a DatasetItem of type Image
-         */
-        DatasetItem(
-                const QFileInfo& fileInfo,
-                const QList<DatasetItem*>& associatedTagfiles,
-                const QList<DatasetItem*>& concurrents,
-                QObject* parent = nullptr
-        );
-        /**
-         * Creates a DatasetItem of type Tagfile
-         */
-        DatasetItem(const QFileInfo& fileInfo, const QString& tags, QObject* parent = nullptr);
-
         enum Type
         {
             Image, Tagfile, Directory, Unknown
         };
-        Q_ENUM(Type);
+        Q_ENUM(Type)
+
+        DatasetItem(const QFileInfo& fileInfo, const Type& type, QObject* parent = nullptr):
+            QObject(parent),
+            path(fileInfo.absoluteFilePath()),
+            name(fileInfo.baseName()),
+            type(type)
+        {
+        }
 
         Q_PROPERTY(const QUrl path MEMBER path CONSTANT)
         Q_PROPERTY(const QString name MEMBER name CONSTANT)
         Q_PROPERTY(const Type type MEMBER type CONSTANT)
-        Q_PROPERTY(const QVariant specificInfos MEMBER specificInfos CONSTANT)
 
     private:
-        DatasetItem(const QFileInfo& fileInfo, const Type& type, const QVariant& specificInfos, QObject* parent = nullptr):
-            QObject(parent),
-            path(fileInfo.absoluteFilePath()),
-            name(fileInfo.baseName()),
-            type(type),
-            specificInfos(specificInfos)
-        {
-        }
-
         const QUrl path;
         const QString name;
         const Type type;
-        const QVariant specificInfos;
 };
 
-class ImageInfo: public QObject
+class ImageDatasetItem: public DatasetItem
 {
     Q_OBJECT
 
     public:
-        ImageInfo(const QList<DatasetItem*>& associatedTagfiles, const QList<DatasetItem*>& concurrents, QObject* parent = nullptr):
-            QObject(parent),
-            associatedTagfiles(associatedTagfiles),
-            concurrents(concurrents)
+        ImageDatasetItem(const QFileInfo& fileInfo, QObject* parent = nullptr):
+            DatasetItem(fileInfo, Type::Image, parent)
         {
         }
 
@@ -79,18 +56,19 @@ class ImageInfo: public QObject
         QList<DatasetItem*> concurrents;
 };
 
-class TagfileInfo: public QObject
+class TagfileDatasetItem: public DatasetItem
 {
     Q_OBJECT
 
     public:
-        TagfileInfo(const QString& tags, QObject* parent = nullptr):
-            QObject(parent),
+        TagfileDatasetItem(const QFileInfo& fileInfo, const QString& tags, QObject* parent = nullptr):
+            DatasetItem(fileInfo, Type::Tagfile, parent),
             tags(tags)
         {
         }
 
         Q_PROPERTY(QString tags MEMBER tags NOTIFY tagsChanged)
+        //QList<DatasetItem*> associatedImages
 
     signals:
         void tagsChanged();
