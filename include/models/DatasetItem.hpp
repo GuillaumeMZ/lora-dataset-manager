@@ -28,7 +28,6 @@ class DatasetItem: public QObject
         Q_PROPERTY(const QString name MEMBER name CONSTANT)
         Q_PROPERTY(const Type type MEMBER type CONSTANT)
 
-    private:
         const QUrl path;
         const QString name;
         const Type type;
