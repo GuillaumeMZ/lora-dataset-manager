@@ -20,6 +20,7 @@ class DatasetViewerViewModel: public QObject
             QObject::connect(dataset, &LocalDataset::itemsChanged, this, [this]() { emit imagesChanged(); });
         }
 
+        Q_PROPERTY(LocalDataset* dataset MEMBER dataset CONSTANT FINAL)
         Q_PROPERTY(QList<ImageDatasetItem*> images READ images NOTIFY imagesChanged FINAL)
 
         QList<ImageDatasetItem*> images() const;
