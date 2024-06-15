@@ -7,3 +7,9 @@ cmake-build-debug/
 # QtCreator files
 build/
 CMakeLists.txt.user
+
+# Qmlls files
+.qmlls.ini
+
+# Temporary junk
+ldm/
