@@ -19,7 +19,7 @@ class DatasetItem: public QObject
         DatasetItem(const QFileInfo& fileInfo, const Type& type, QObject* parent = nullptr):
             QObject(parent),
             path(fileInfo.absoluteFilePath()),
-            name(fileInfo.baseName()),
+            name(fileInfo.fileName()),
             type(type)
         {
         }
