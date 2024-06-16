@@ -8,8 +8,6 @@
 #include <QList>
 #include <QObject>
 
-#include "models/DatasetItem.hpp"
-
 class LocalDatasetWatcher: public QObject
 {
     Q_OBJECT

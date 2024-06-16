@@ -74,7 +74,8 @@ void LocalDatasetWatcher::handleFileChange(const QString& path) {
         //it is a creation or a deletion (handled by handleDirectoryChange)
         return;
     }
-    //TODO: emit signal
+
+    emit itemModified(pathInfo);
 }
 
 std::optional<QFileInfo> LocalDatasetWatcher::getAddedItem() const
