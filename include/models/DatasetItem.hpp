@@ -30,9 +30,10 @@ class DatasetItem: public QObject
         Q_PROPERTY(const Type type MEMBER type CONSTANT)
 
         virtual void registerBuddy(DatasetItem* buddy) { /* no-op */ }
-        virtual void unregisterBuddy(DatasetItem* buddy) { /* no-op */ }
+        virtual void unregisterBuddy(const QFileInfo& buddyInfo) { /* no-op */ }
 
-        const QUrl path;
+        // The absolute path of the item.
+        const QUrl path; //should it be named "absolutePath" instead ?
         const QString name;
         const QString baseName;
         const Type type;
@@ -52,7 +53,7 @@ class ImageDatasetItem: public DatasetItem
         Q_PROPERTY(QList<DatasetItem*> concurrents MEMBER concurrents NOTIFY concurrentsChanged)
 
         void registerBuddy(DatasetItem* buddy) override;
-        void unregisterBuddy(DatasetItem* buddy) override;
+        void unregisterBuddy(const QFileInfo& buddyInfo) override;
 
     signals:
         void associatedTagfileChanged();
@@ -78,7 +79,7 @@ class TagfileDatasetItem: public DatasetItem
         Q_PROPERTY(QString tags MEMBER tags NOTIFY tagsChanged)
 
         void registerBuddy(DatasetItem* buddy) override;
-        void unregisterBuddy(DatasetItem* buddy) override;
+        void unregisterBuddy(const QFileInfo& buddyInfo) override;
 
     signals:
         void associatedImagesChanged();

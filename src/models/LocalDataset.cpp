@@ -33,9 +33,7 @@ void LocalDataset::onItemAdded(QFileInfo itemInfo)
 
 void LocalDataset::onItemRemoved(QFileInfo itemInfo)
 {
-    DatasetItem* oldItem = fromFileInfo(itemInfo);
-
-    qsizetype removedItemsCount = items.removeIf([oldItem](DatasetItem* currentItem) { return oldItem->path == currentItem->path; });
+    qsizetype removedItemsCount = items.removeIf([itemInfo](DatasetItem* currentItem) { return QUrl(itemInfo.absoluteFilePath()) == currentItem->path; });
     if(removedItemsCount == 0)
     {
         return; //shouldn't happen
@@ -43,7 +41,7 @@ void LocalDataset::onItemRemoved(QFileInfo itemInfo)
 
     for(DatasetItem* item: items)
     {
-        item->unregisterBuddy(oldItem);
+        item->unregisterBuddy(itemInfo);
     }
 
     emit itemsChanged();

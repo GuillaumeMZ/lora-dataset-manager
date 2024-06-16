@@ -15,16 +15,14 @@ void ImageDatasetItem::registerBuddy(DatasetItem* buddy)
     }
 }
 
-void ImageDatasetItem::unregisterBuddy(DatasetItem* buddy)
+void ImageDatasetItem::unregisterBuddy(const QFileInfo& buddy)
 {
-    if(buddy->type == Type::Image && buddy->baseName == baseName)
+    if(concurrents.removeIf([buddy](DatasetItem* item) { return QUrl(buddy.absoluteFilePath()) == item->path; }) != 0)
     {
-        //should we emit if removeIf succeded ?
-        concurrents.removeIf([buddy](DatasetItem* item) { return item->path == buddy->path; });
         emit concurrentsChanged();
     }
 
-    if(buddy->type == Type::Tagfile && buddy->baseName == baseName)
+    if(associatedTagfile != nullptr && QUrl(buddy.absoluteFilePath()) == associatedTagfile->path)
     {
         associatedTagfile = nullptr;
         emit associatedTagfileChanged();
@@ -40,12 +38,10 @@ void TagfileDatasetItem::registerBuddy(DatasetItem* buddy)
     }
 }
 
-void TagfileDatasetItem::unregisterBuddy(DatasetItem* buddy)
+void TagfileDatasetItem::unregisterBuddy(const QFileInfo& buddy)
 {
-    if(buddy->type == Type::Image && buddy->baseName == baseName)
+    if(associatedImages.removeIf([buddy](DatasetItem* item) { return QUrl(buddy.absoluteFilePath()) == item->path; }) != 0)
     {
-        //should we emit if removeIf succeded ?
-        associatedImages.removeIf([buddy](DatasetItem* item) { return item->path == buddy->path; });
         emit associatedImagesChanged();
     }
 }
