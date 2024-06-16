@@ -20,6 +20,7 @@ class DatasetItem: public QObject
             QObject(parent),
             path(fileInfo.absoluteFilePath()),
             name(fileInfo.fileName()),
+            baseName(fileInfo.baseName()),
             type(type)
         {
         }
@@ -28,8 +29,12 @@ class DatasetItem: public QObject
         Q_PROPERTY(const QString name MEMBER name CONSTANT)
         Q_PROPERTY(const Type type MEMBER type CONSTANT)
 
+        virtual void registerBuddy(DatasetItem* buddy) { /* no-op */ }
+        virtual void unregisterBuddy(DatasetItem* buddy) { /* no-op */ }
+
         const QUrl path;
         const QString name;
+        const QString baseName;
         const Type type;
 };
 
@@ -43,15 +48,18 @@ class ImageDatasetItem: public DatasetItem
         {
         }
 
-        Q_PROPERTY(QList<DatasetItem*> associatedTagfiles MEMBER associatedTagfiles NOTIFY associatedTagfilesChanged)
+        Q_PROPERTY(DatasetItem* associatedTagfile MEMBER associatedTagfile NOTIFY associatedTagfileChanged)
         Q_PROPERTY(QList<DatasetItem*> concurrents MEMBER concurrents NOTIFY concurrentsChanged)
 
+        void registerBuddy(DatasetItem* buddy) override;
+        void unregisterBuddy(DatasetItem* buddy) override;
+
     signals:
-        void associatedTagfilesChanged();
+        void associatedTagfileChanged();
         void concurrentsChanged();
 
     private:
-        QList<DatasetItem*> associatedTagfiles;
+        DatasetItem* associatedTagfile {};
         QList<DatasetItem*> concurrents;
 };
 
@@ -66,12 +74,17 @@ class TagfileDatasetItem: public DatasetItem
         {
         }
 
+        Q_PROPERTY(QList<DatasetItem*> associatedImages MEMBER associatedImages NOTIFY associatedImagesChanged)
         Q_PROPERTY(QString tags MEMBER tags NOTIFY tagsChanged)
-        //QList<DatasetItem*> associatedImages
+
+        void registerBuddy(DatasetItem* buddy) override;
+        void unregisterBuddy(DatasetItem* buddy) override;
 
     signals:
+        void associatedImagesChanged();
         void tagsChanged();
 
     private:
+        QList<DatasetItem*> associatedImages;
         QString tags;
 };

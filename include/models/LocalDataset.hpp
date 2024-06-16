@@ -21,11 +21,12 @@ class LocalDataset: public QObject
         //Q_INVOKABLE void saveAll();
 
         Q_PROPERTY(QList<DatasetItem*> items MEMBER items NOTIFY itemsChanged)
+        Q_PROPERTY(QString name READ name CONSTANT)
+        Q_PROPERTY(QUrl path READ path CONSTANT)
 
-        const QList<DatasetItem*>& getItems() const
-        {
-            return items;
-        }
+        const QList<DatasetItem*>& getItems() const { return items; }
+        QString name() const { return datasetRoot.dirName(); }
+        QUrl path() const { return datasetRoot.absolutePath(); }
 
     signals:
         void itemsChanged();
@@ -34,7 +35,7 @@ class LocalDataset: public QObject
 
     private slots:
         void onItemAdded(QFileInfo item);
-        //void onItemRemoved(QFileInfo item);
+        void onItemRemoved(QFileInfo item);
         //void onDatasetRemoved();
 
     private:

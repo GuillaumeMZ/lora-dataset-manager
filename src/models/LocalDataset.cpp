@@ -11,15 +11,40 @@ LocalDataset::LocalDataset(const QDir& datasetRoot, QObject* parent):
     }
 
     QObject::connect(&watcher, &LocalDatasetWatcher::itemAdded, this, &LocalDataset::onItemAdded);
-    // QObject::connect(&watcher, &LocalDatasetWatcher::itemRemoved, this, &LocalDataset::onItemRemoved);
-    // QObject::connect(&watcher, &LocalDatasetWatcher::itemModified, this, [this](QFileInfo item) { emit itemModified(fromFileInfo(item)); });
+    QObject::connect(&watcher, &LocalDatasetWatcher::itemRemoved, this, &LocalDataset::onItemRemoved);
+    QObject::connect(&watcher, &LocalDatasetWatcher::itemModified, this, [this](QFileInfo item) { emit itemModified(fromFileInfo(item)); });
     QObject::connect(&watcher, &LocalDatasetWatcher::datasetRemoved, this, [this] { emit datasetRemoved(); });
 }
 
-void LocalDataset::onItemAdded(QFileInfo item)
+void LocalDataset::onItemAdded(QFileInfo itemInfo)
 {
-    items.append(fromFileInfo(item));
-    //TODO: trigger a recomputation of associatedTagfiles/concurrents/associatedImages
+    DatasetItem* newItem = fromFileInfo(itemInfo);
+
+    for(DatasetItem* item: items)
+    {
+        item->registerBuddy(newItem);
+        newItem->registerBuddy(item);
+    }
+
+    items.append(newItem);
+
+    emit itemsChanged();
+}
+
+void LocalDataset::onItemRemoved(QFileInfo itemInfo)
+{
+    DatasetItem* oldItem = fromFileInfo(itemInfo);
+
+    qsizetype removedItemsCount = items.removeIf([oldItem](DatasetItem* currentItem) { return oldItem->path == currentItem->path; });
+    if(removedItemsCount == 0)
+    {
+        return; //shouldn't happen
+    }
+
+    for(DatasetItem* item: items)
+    {
+        item->unregisterBuddy(oldItem);
+    }
 
     emit itemsChanged();
 }
@@ -28,10 +53,9 @@ DatasetItem* LocalDataset::fromFileInfo(const QFileInfo& fileInfo)
 {
     const QString extension = fileInfo.suffix().toLower();
 
-    DatasetItem* result;
     if(IMAGE_FORMATS->contains(extension))
     {
-        result = new ImageDatasetItem(fileInfo, this);
+        return new ImageDatasetItem(fileInfo, this);
     }
     else if(*TAGFILE_FORMAT == extension)
     {
@@ -40,16 +64,14 @@ DatasetItem* LocalDataset::fromFileInfo(const QFileInfo& fileInfo)
         QString tags = tagfile.readAll();
         tagfile.close();
 
-        result = new TagfileDatasetItem(fileInfo, tags, this);
+        return new TagfileDatasetItem(fileInfo, tags, this);
     }
     else if(fileInfo.isDir())
     {
-        result = new DatasetItem(fileInfo, DatasetItem::Type::Directory, this);
+        return new DatasetItem(fileInfo, DatasetItem::Type::Directory, this);
     }
     else
     {
-        result = new DatasetItem(fileInfo, DatasetItem::Type::Unknown, this);
+        return new DatasetItem(fileInfo, DatasetItem::Type::Unknown, this);
     }
-
-    return result;
 }
