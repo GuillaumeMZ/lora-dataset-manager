@@ -15,6 +15,16 @@ Window {
 	//required property DatasetViewerViewModel viewModel
 	property int currentItemIndex: 0 //should be named currentImageIndex
 
+	Connections {
+		target: viewModel
+
+		function onImagesChanged() {
+			if(root.currentItemIndex >= viewModel.images.length) {
+				root.currentItemIndex = Math.max(0, viewModel.images.length - 1);
+			}
+		}
+	}
+
 	Item {
 		anchors.fill: parent
 
