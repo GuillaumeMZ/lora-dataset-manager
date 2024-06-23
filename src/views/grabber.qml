@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt.labs.qmlmodels
 
 import LDM 1.0
 
@@ -108,12 +109,13 @@ Window {
 
         Item {
             id: grabberView
+            property bool resultFound: true
 
             ScrollView {
                 anchors.fill: parent
                 anchors.topMargin: 8
 
-                visible: parent.state !== "no_result"
+                visible: grabberView.resultFound
 
                 Flow {
                     spacing: 8
@@ -176,19 +178,19 @@ Window {
                 anchors.centerIn: parent
 
                 text: "No result."
-                visible: parent.state === "no_result"
+                visible: !grabberView.resultFound
             }
 
             Connections {
                 target: grabberViewModel
 
                 function onQueryStarted() {
-                    grabberView.state = "";
+                    grabberView.resultFound = true;
                 }
 
                 function onQueryFinished() {
                     if(grabberViewModel.queriedImages.rowCount() === 0) {
-                        grabberView.state = "no_result";
+                        grabberView.resultFound = false;
                     }
                 }
 
@@ -196,13 +198,74 @@ Window {
                     //TODO
                 }
             }
-
-            states: [
-                State {
-                    name: "no_result"
-                }
-            ]
         }
+
+        // Item {
+        //     HorizontalHeaderView {
+        //         id: tableHeader
+        //
+        //         anchors {
+        //             top: parent.top
+        //             left: parent.left
+        //             right: parent.right
+        //         }
+        //
+        //         clip: true
+        //         interactive: false
+        //
+        //         syncView: tableView
+        //     }
+        //
+        //     TableView {
+        //         id: tableView
+        //
+        //         anchors {
+        //             top: tableHeader.bottom
+        //             left: parent.left
+        //             right: parent.right
+        //             bottom: parent.bottom
+        //         }
+        //
+        //         clip: true
+        //         interactive: false
+        //
+        //         //contentWidth: width
+        //         columnWidthProvider: (column) => {
+        //             return width / columns;
+        //         }
+        //
+        //         model: TableModel {
+        //             TableModelColumn { display: "name" }
+        //             TableModelColumn { display: "color" }
+        //
+        //             rows: [
+        //                 {
+        //                     "name": "cat",
+        //                     "color": "black"
+        //                 },
+        //                 {
+        //                     "name": "dog",
+        //                     "color": "brown"
+        //                 },
+        //                 {
+        //                     "name": "bird",
+        //                     "color": "white"
+        //                 }
+        //             ]
+        //         }
+        //
+        //         delegate: Rectangle {
+        //             implicitWidth: 100
+        //             implicitHeight: 50
+        //             border.width: 1
+        //
+        //             Text {
+        //                 text: display
+        //                 anchors.centerIn: parent
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     Button {

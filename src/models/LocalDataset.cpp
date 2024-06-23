@@ -5,15 +5,14 @@ LocalDataset::LocalDataset(const QDir& datasetRoot, QObject* parent):
     datasetRoot(datasetRoot),
     watcher(datasetRoot, this)
 {
-    for(const auto& fileInfo: datasetRoot.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot))
-    {
-        onItemAdded(fileInfo);
-    }
+    Q_ASSERT(QObject::connect(&watcher, &LocalDatasetWatcher::itemAdded, this, &LocalDataset::onItemAdded));
+    Q_ASSERT(QObject::connect(&watcher, &LocalDatasetWatcher::itemRemoved, this, &LocalDataset::onItemRemoved));
+    Q_ASSERT(QObject::connect(&watcher, &LocalDatasetWatcher::itemModified, this, [this](QFileInfo item) { emit itemModified(fromFileInfo(item)); }));
+    Q_ASSERT(QObject::connect(&watcher, &LocalDatasetWatcher::datasetRemoved, this, [this] { emit datasetRemoved(); }));
 
-    QObject::connect(&watcher, &LocalDatasetWatcher::itemAdded, this, &LocalDataset::onItemAdded);
-    QObject::connect(&watcher, &LocalDatasetWatcher::itemRemoved, this, &LocalDataset::onItemRemoved);
-    QObject::connect(&watcher, &LocalDatasetWatcher::itemModified, this, [this](QFileInfo item) { emit itemModified(fromFileInfo(item)); });
-    QObject::connect(&watcher, &LocalDatasetWatcher::datasetRemoved, this, [this] { emit datasetRemoved(); });
+    Q_ASSERT(QObject::connect(this, &LocalDataset::itemAdded, this, &LocalDataset::itemsChanged));
+    Q_ASSERT(QObject::connect(this, &LocalDataset::itemRemoved, this, &LocalDataset::itemsChanged));
+    //QObject::connect(this, &LocalDataset::itemModified, this, [this] { emit itemsChanged(); }); ?
 }
 
 void LocalDataset::onItemAdded(QFileInfo itemInfo)
@@ -28,7 +27,7 @@ void LocalDataset::onItemAdded(QFileInfo itemInfo)
 
     items.append(newItem);
 
-    emit itemsChanged();
+    emit itemAdded(newItem);
 }
 
 void LocalDataset::onItemRemoved(QFileInfo itemInfo)
@@ -44,7 +43,7 @@ void LocalDataset::onItemRemoved(QFileInfo itemInfo)
         item->unregisterBuddy(itemInfo);
     }
 
-    emit itemsChanged();
+    emit itemRemoved(itemInfo);
 }
 
 DatasetItem* LocalDataset::fromFileInfo(const QFileInfo& fileInfo)
@@ -60,7 +59,6 @@ DatasetItem* LocalDataset::fromFileInfo(const QFileInfo& fileInfo)
         QFile tagfile(fileInfo.absoluteFilePath());
         tagfile.open(QIODevice::ReadOnly | QIODevice::ExistingOnly);
         QString tags = tagfile.readAll();
-        tagfile.close();
 
         return new TagfileDatasetItem(fileInfo, tags, this);
     }

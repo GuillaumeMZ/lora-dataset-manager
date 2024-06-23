@@ -112,6 +112,17 @@ Window {
 					anchors.fill: parent
 
 					TextArea {
+						id: tagEditor
+
+						onTextChanged: function() {
+							//don't know why but I can't turn this whole expression into a variable
+							if(viewModel.images[root.currentItemIndex].associatedTagfile === null) {
+								return;
+							}
+
+							viewModel.images[root.currentItemIndex].associatedTagfile.tags = text;
+						}
+
 						text: viewModel.images[root.currentItemIndex].associatedTagfile?.tags ?? ""
 						placeholderText: "Write your tags here..."
 						wrapMode: TextEdit.WrapAnywhere

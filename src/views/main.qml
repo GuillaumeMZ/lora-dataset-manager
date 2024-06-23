@@ -8,11 +8,5 @@ Window {
     width: 640
     height: 480
     title: qsTr("Hello World")
-    Button {
-        text: "Ok"
-        onClicked: {
-            root.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-        }
-    }
 }
 

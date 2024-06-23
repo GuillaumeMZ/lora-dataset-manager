@@ -17,17 +17,21 @@ class DatasetViewerViewModel: public QObject
             QObject(parent),
             dataset(dataset)
         {
-            QObject::connect(dataset, &LocalDataset::itemsChanged, this, [this]() { emit imagesChanged(); });
+            Q_ASSERT(QObject::connect(dataset, &LocalDataset::itemAdded, this, &DatasetViewerViewModel::onItemAdded));
+            Q_ASSERT(QObject::connect(dataset, &LocalDataset::itemRemoved, this, &DatasetViewerViewModel::onItemRemoved));
         }
 
-        Q_PROPERTY(LocalDataset* dataset MEMBER dataset CONSTANT FINAL)
-        Q_PROPERTY(QList<ImageDatasetItem*> images READ images NOTIFY imagesChanged FINAL)
+        Q_PROPERTY(LocalDataset* dataset MEMBER dataset CONSTANT)
+        Q_PROPERTY(QList<ImageDatasetItem*> images MEMBER images NOTIFY imagesChanged)
 
-        QList<ImageDatasetItem*> images() const;
+    private slots:
+        void onItemAdded(DatasetItem* item);
+        void onItemRemoved(QFileInfo itemInfo);
 
     signals:
         void imagesChanged();
 
     private:
         LocalDataset* dataset;
+        QList<ImageDatasetItem*> images;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QQmlEngine>
 
 #include "models/EasyListModel.hpp"
 #include "models/BooruImage.hpp"
@@ -9,6 +10,7 @@
 class GrabberViewModel: public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 
     public:
         GrabberViewModel(QObject* parent = nullptr):

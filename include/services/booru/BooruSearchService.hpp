@@ -1,11 +1,11 @@
 #pragma once
 
-#include <variant>
+#include <variant> //is it even useful ?
 
 #include <QList>
-#include <QNetworkReply>
+#include <QNetworkReply> //todo: move
 #include <QObject>
-#include <QtXml/QDomComment>
+#include <QtXml/QDomComment> //todo: move
 
 #include "models/BooruImage.hpp"
 

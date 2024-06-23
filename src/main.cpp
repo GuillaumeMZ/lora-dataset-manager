@@ -1,18 +1,32 @@
+#include <iostream>
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include "viewmodels/GrabberViewModel.hpp"
+#include <QDir>
+#include <QDirIterator>
+#include <QQmlContext>
+
+#include "models/LocalDataset.hpp"
+#include "viewmodels/DatasetViewerViewModel.hpp"
+
+#include "models/LocalDataset.hpp"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication _(argc, argv);
 
-	QQmlApplicationEngine engine;
-	qmlRegisterType<GrabberViewModel>("LDM", 1, 0, "GrabberViewModel");
 
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    if (engine.rootObjects().isEmpty())
-        return -1;
+    LocalDataset dataset(QString("/home/guillaume/Documents/test_dataset"));
+    DatasetViewerViewModel viewModel(&dataset);
+    dataset.load();
+
+    QQmlApplicationEngine engine;
+    //engine.loadFromModule("LDM.src.views", "Main");
+    engine.rootContext()->setContextProperty("viewModel", &viewModel);
+
+    //TODO: reorganize the project files to use QQmlApplicationEngine::loadFromModule instead of this
+    engine.load(QUrl(QStringLiteral("qrc:/qt/qml/LDM/src/views/main.qml")));
 
     return QGuiApplication::exec();
 }

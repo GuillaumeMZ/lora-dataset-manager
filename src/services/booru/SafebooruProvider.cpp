@@ -3,7 +3,7 @@
 
 QNetworkRequest SafebooruProvider::prepareRequest(const BooruSearchParameters& parameters)
 {
-        return PrepareGelbooruRequest("safebooru.org", parameters);
+    return PrepareGelbooruRequest("safebooru.org", parameters);
 }
 
 std::variant<QList<BooruImage*>, QString> SafebooruProvider::tryParseReply(QNetworkReply& reply) const

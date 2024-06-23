@@ -1,18 +1,19 @@
 #include "viewmodels/DatasetViewerViewModel.hpp"
 
-QList<ImageDatasetItem*> DatasetViewerViewModel::images() const
+void DatasetViewerViewModel::onItemAdded(DatasetItem* item)
 {
-    QList<ImageDatasetItem*> result;
-
-    for(auto item: dataset->getItems())
+    if(item->type != DatasetItem::Type::Image)
     {
-        if(item->type != DatasetItem::Type::Image)
-        {
-            continue;
-        }
-
-        result.append(qobject_cast<ImageDatasetItem*>(item));
+        return;
     }
 
-    return result;
+    images.append(qobject_cast<ImageDatasetItem*>(item));
+    emit imagesChanged();
+
+    //no need to handle tagfiles because tags are embedded inside the imagedatasetitem
+}
+
+void DatasetViewerViewModel::onItemRemoved(QFileInfo itemInfo)
+{
+
 }

@@ -24,25 +24,33 @@ class LocalDataset: public QObject
         Q_PROPERTY(QString name READ name CONSTANT)
         Q_PROPERTY(QUrl path READ path CONSTANT)
 
-        const QList<DatasetItem*>& getItems() const { return items; }
+        void load()
+        {
+            for(const auto& fileInfo: datasetRoot.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot))
+            {
+                onItemAdded(fileInfo);
+            }
+        }
+
         QString name() const { return datasetRoot.dirName(); }
         QUrl path() const { return datasetRoot.absolutePath(); }
 
     signals:
         void itemsChanged();
+        void itemAdded(DatasetItem* item);
+        void itemRemoved(QFileInfo item);
         void itemModified(DatasetItem* item);
         void datasetRemoved();
 
     private slots:
         void onItemAdded(QFileInfo item);
         void onItemRemoved(QFileInfo item);
-        //void onDatasetRemoved();
 
     private:
         DatasetItem* fromFileInfo(const QFileInfo& fileInfo);
 
     private:
-        QDir datasetRoot;
+        const QDir datasetRoot;
         QList<DatasetItem*> items;
         LocalDatasetWatcher watcher;
 };
