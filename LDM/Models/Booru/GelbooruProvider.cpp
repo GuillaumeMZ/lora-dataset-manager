@@ -2,7 +2,7 @@
 #include <QUrl>
 #include <QUrlQuery>
 
-#include "services/booru/GelbooruProvider.hpp"
+#include "./GelbooruProvider.hpp"
 
 QNetworkRequest PrepareGelbooruRequest(const QString& booruBaseUrl, const BooruSearchParameters& parameters)
 {

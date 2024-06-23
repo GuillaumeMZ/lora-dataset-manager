@@ -7,8 +7,8 @@
 #include <QNetworkRequest>
 #include <QString>
 
-#include "models/BooruImage.hpp"
-#include "services/booru/BooruSearchService.hpp"
+#include "./BooruImage.hpp"
+#include "./BooruSearchService.hpp"
 
 class BooruProvider
 {

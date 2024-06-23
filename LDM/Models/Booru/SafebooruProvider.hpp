@@ -1,6 +1,6 @@
 #pragma once
 
-#include "services/booru/BooruProvider.hpp"
+#include "./BooruProvider.hpp"
 
 class SafebooruProvider: public BooruProvider
 {

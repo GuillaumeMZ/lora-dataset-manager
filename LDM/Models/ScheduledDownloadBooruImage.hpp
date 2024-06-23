@@ -4,7 +4,7 @@
 
 #include <QObject>
 
-#include "models/BooruImage.hpp"
+#include "./Booru/BooruImage.hpp"
 
 class ScheduledDownloadBooruImage: public QObject
 {

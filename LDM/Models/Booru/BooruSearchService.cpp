@@ -4,10 +4,10 @@
 #include <QUrl>
 #include <QUrlQuery>
 
-#include "services/booru/BooruSearchService.hpp"
-#include "services/booru/GelbooruProvider.hpp"
-#include "services/booru/SafebooruProvider.hpp"
-#include "services/GlobalNetworkService.hpp"
+#include "./BooruSearchService.hpp"
+#include "./GelbooruProvider.hpp"
+#include "./SafebooruProvider.hpp"
+#include "../GlobalNetworkService.hpp"
 
 void BooruSearchRequest::start(const BooruSearchParameters& searchParameters)
 {

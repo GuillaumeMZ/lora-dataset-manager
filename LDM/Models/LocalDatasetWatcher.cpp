@@ -1,6 +1,6 @@
 #include <QDebug>
 
-#include "services/LocalDatasetWatcher.hpp"
+#include "./LocalDatasetWatcher.hpp"
 
 LocalDatasetWatcher::LocalDatasetWatcher(QDir datasetRoot, QObject* parent):
     QObject(parent),

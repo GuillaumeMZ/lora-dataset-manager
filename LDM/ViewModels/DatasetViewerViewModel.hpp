@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QQmlEngine>
 
-#include "models/DatasetItem.hpp"
-#include "models/LocalDataset.hpp"
+#include "../Models/DatasetItem.hpp"
+#include "../Models/LocalDataset.hpp"
 
 class DatasetViewerViewModel: public QObject
 {

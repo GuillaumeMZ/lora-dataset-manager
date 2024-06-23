@@ -1,4 +1,4 @@
-#include "viewmodels/DatasetViewerViewModel.hpp"
+#include "./DatasetViewerViewModel.hpp"
 
 void DatasetViewerViewModel::onItemAdded(DatasetItem* item)
 {

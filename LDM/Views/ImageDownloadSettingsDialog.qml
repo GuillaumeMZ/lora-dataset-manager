@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 
-import LDM 1.0
+import LDM.ViewModels 1.0
 
 Window {
     id: window

@@ -1,4 +1,4 @@
-#include "models/LocalDataset.hpp"
+#include "./LocalDataset.hpp"
 
 LocalDataset::LocalDataset(const QDir& datasetRoot, QObject* parent):
     QObject(parent),

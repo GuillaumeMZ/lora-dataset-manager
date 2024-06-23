@@ -9,41 +9,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 qt_add_executable(app
-        src/models/DatasetItem.cpp
-        src/models/LocalDataset.cpp
-        src/services/booru/BooruSearchService.cpp
-        src/services/booru/GelbooruProvider.cpp
-        src/services/booru/SafebooruProvider.cpp
-        src/services/LocalDatasetWatcher.cpp
-        src/viewmodels/DatasetViewerViewModel.cpp
-        src/viewmodels/GrabberViewModel.cpp
-        src/main.cpp
+    main.cpp
+)
 
-        include/models/BooruImage.hpp
-        include/models/DatasetItem.hpp
-        include/models/EasyListModel.hpp
-        include/models/LocalDataset.hpp
-        include/models/ScheduledDownloadBooruImage.hpp
-        include/services/booru/BooruProvider.hpp
-        include/services/booru/BooruSearchService.hpp
-        include/services/booru/GelbooruProvider.hpp
-        include/services/booru/SafebooruProvider.hpp
-        include/services/GlobalNetworkService.hpp
-        include/services/LocalDatasetWatcher.hpp
-        include/viewmodels/DatasetViewerViewModel.hpp
-        include/viewmodels/GrabberViewModel.hpp
-)
-qt_add_qml_module(app
-    URI LDM
-    VERSION 1.0
-    QML_FILES
-        src/views/DatasetViewer.qml
-        src/views/grabber.qml
-        src/views/ImageDownloadSettingsDialog.qml
-        src/views/main.qml
-    SOURCES
-        include/viewmodels/GrabberViewModel.hpp
-        src/viewmodels/GrabberViewModel.cpp
-)
-target_include_directories(app PRIVATE include PRIVATE include/viewmodels)
+add_subdirectory(LDM/Models/)
+add_subdirectory(LDM/ViewModels/)
+add_subdirectory(LDM/Views/)
+
+target_link_libraries(app PRIVATE ldm_viewsplugin ldm_viewmodelsplugin ldm_modelsplugin) # Do NOT change the order.
 target_link_libraries(app PRIVATE Qt6::Gui Qt6::Quick Qt6::Xml)

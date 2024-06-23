@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QtXml/QDomComment> //todo: move
 
-#include "models/BooruImage.hpp"
+#include "./BooruImage.hpp"
 
 struct BooruSearchParameters
 {

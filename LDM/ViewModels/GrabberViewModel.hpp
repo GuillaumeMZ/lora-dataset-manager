@@ -3,9 +3,9 @@
 #include <QObject>
 #include <QQmlEngine>
 
-#include "models/EasyListModel.hpp"
-#include "models/BooruImage.hpp"
-#include "models/ScheduledDownloadBooruImage.hpp"
+#include "../Models/Booru/BooruImage.hpp"
+#include "../Models/EasyListModel.hpp"
+#include "../Models/ScheduledDownloadBooruImage.hpp"
 
 class GrabberViewModel: public QObject
 {

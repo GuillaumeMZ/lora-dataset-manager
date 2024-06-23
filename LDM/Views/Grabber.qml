@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt.labs.qmlmodels
 
-import LDM 1.0
+import LDM.ViewModels 1.0
 
 Window {
     width: 800; height: 600

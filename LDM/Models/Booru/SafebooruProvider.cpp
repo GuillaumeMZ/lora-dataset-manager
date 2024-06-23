@@ -1,5 +1,5 @@
-#include "services/booru/GelbooruProvider.hpp"
-#include "services/booru/SafebooruProvider.hpp"
+#include "./GelbooruProvider.hpp"
+#include "./SafebooruProvider.hpp"
 
 QNetworkRequest SafebooruProvider::prepareRequest(const BooruSearchParameters& parameters)
 {

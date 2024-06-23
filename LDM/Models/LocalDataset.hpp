@@ -4,8 +4,8 @@
 #include <QFileInfo>
 #include <QObject>
 
-#include "models/DatasetItem.hpp"
-#include "services/LocalDatasetWatcher.hpp"
+#include "./DatasetItem.hpp"
+#include "./LocalDatasetWatcher.hpp"
 
 Q_GLOBAL_STATIC(const QList<QString>, IMAGE_FORMATS, {"png", "jpg", "jpeg", "bmp", "webp"})
 Q_GLOBAL_STATIC(const QString, TAGFILE_FORMAT, "txt")
